@@ -1,0 +1,92 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2026-03-06 00:26:33.447073",
+  "name": "Pending",
+  "style": "",
+  "workflow_state_name": "Pending"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2026-03-06 00:26:33.450372",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2026-03-06 00:26:33.452323",
+  "name": "Rejected",
+  "style": "Danger",
+  "workflow_state_name": "Rejected"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-25 13:38:22.223870",
+  "name": "WD Draft",
+  "style": "",
+  "workflow_state_name": "WD Draft"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-25 13:38:22.269381",
+  "name": "WD Pending Purchase Manager Approval",
+  "style": "Warning",
+  "workflow_state_name": "WD Pending Purchase Manager Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-25 13:38:22.273656",
+  "name": "WD Review by Purchase User",
+  "style": "Info",
+  "workflow_state_name": "WD Review by Purchase User"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-25 13:38:22.278936",
+  "name": "WD Pending Supply Chain Manager Approval",
+  "style": "Warning",
+  "workflow_state_name": "WD Pending Supply Chain Manager Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-25 13:38:22.281417",
+  "name": "WD Review by Purchase Manager",
+  "style": "Info",
+  "workflow_state_name": "WD Review by Purchase Manager"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-25 13:38:22.284554",
+  "name": "WD Approved",
+  "style": "Success",
+  "workflow_state_name": "WD Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-25 13:38:22.287387",
+  "name": "WD Rejected",
+  "style": "Danger",
+  "workflow_state_name": "WD Rejected"
+ }
+]

@@ -1,0 +1,21 @@
+{
+ "chart_name": "WD Procurement KPI",
+ "chart_type": "Report",
+ "creation": "2024-01-01 00:00:00",
+ "custom_options": "{\"type\": \"bar\", \"barOptions\": {\"stacked\": 0}, \"axisOptions\": {\"shortenYAxisNumbers\": 1}, \"tooltipOptions\": {}}",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "dynamic_filters_json": "{\"company\":\"frappe.defaults.get_user_default(\\\"Company\\\")\",\"from_date\":\"frappe.datetime.add_months(frappe.datetime.nowdate(), -3)\",\"to_date\":\"frappe.datetime.nowdate()\"}",
+ "filters_json": "{}",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "module": "Workflow Design",
+ "name": "WD Procurement KPI",
+ "owner": "Administrator",
+ "report_name": "WD Procurement KPI",
+ "timeseries": 0,
+ "type": "Bar",
+ "use_report_chart": 1,
+ "y_axis": []
+}

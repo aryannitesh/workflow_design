@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+
+  <p>Dear Team,</p>
+
+  <p>
+    Automatic evaluation has completed for
+    <strong>Request for Quotation {{ rfq_name }}</strong>.
+    The results are listed below.
+  </p>
+
+  <table style="border-collapse: collapse; width: 100%; max-width: 680px;">
+    <thead>
+      <tr style="background: #f5f5f5;">
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: left;">Rank</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: left;">Supplier Quotation</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: left;">Supplier</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">Grand Total</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">Delivery Days</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">Payment Days</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">Score</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd; text-align: center;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in results %}
+      <tr style="background: {{ '#f0fff4' if r.is_winner else '#fff' }};">
+        <td style="padding: 8px 12px; border: 1px solid #ddd;">{{ loop.index }}</td>
+        <td style="padding: 8px 12px; border: 1px solid #ddd;">
+          <a href="{{ r.url }}">{{ r.name }}</a>
+        </td>
+        <td style="padding: 8px 12px; border: 1px solid #ddd;">{{ r.supplier }}</td>
+        <td style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">
+          {{ r.grand_total | round(2) }}
+        </td>
+        <td style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">
+          {{ r.delivery_days }}
+        </td>
+        <td style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">
+          {{ r.payment_days }}
+        </td>
+        <td style="padding: 8px 12px; border: 1px solid #ddd; text-align: right;">
+          {{ "%.4f" | format(r.total_score) }}
+        </td>
+        <td style="padding: 8px 12px; border: 1px solid #ddd; text-align: center;">
+          {% if r.is_winner %}
+            <span style="color: #16a34a; font-weight: bold;">✔ Approved</span>
+          {% else %}
+            <span style="color: #dc2626;">✘ Rejected</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <br>
+  <p>
+    <a href="{{ rfq_url }}"
+       style="background: #4f46e5; color: #fff; padding: 10px 20px;
+              text-decoration: none; border-radius: 4px; display: inline-block;">
+      Open RFQ {{ rfq_name }}
+    </a>
+  </p>
+
+  <p style="color: #888; font-size: 12px;">
+    Scoring weights — Rate: 40% &nbsp;|&nbsp; Delivery Days: 30% &nbsp;|&nbsp; Payment Days: 30%<br>
+    This is an automated notification from {{ site_name }}.
+  </p>
+</body>
+</html>

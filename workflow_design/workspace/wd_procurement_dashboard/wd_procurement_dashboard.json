@@ -1,0 +1,79 @@
+{
+ "charts": [
+  {
+   "chart_name": "WD Procurement KPI",
+   "doctype": "Workspace Chart",
+   "label": "WD Procurement KPI"
+  }
+ ],
+ "content": "[{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Procurement Overview</b></span>\",\"col\":12}},{\"type\":\"card\",\"data\":{\"card_name\":\"WD Open Material Requests\",\"col\":3}},{\"type\":\"card\",\"data\":{\"card_name\":\"WD Approved RFQs\",\"col\":3}},{\"type\":\"card\",\"data\":{\"card_name\":\"WD Pending Purchase Orders\",\"col\":3}},{\"type\":\"card\",\"data\":{\"card_name\":\"WD Total Purchase Orders\",\"col\":3}},{\"type\":\"chart\",\"data\":{\"chart_name\":\"WD Procurement KPI\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WD Procurement KPI Report\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Request List\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Request for Quotation List\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order List\",\"col\":3}}]",
+ "creation": "2024-01-01 00:00:00",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "icon": "dashboard",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "WD Procurement Dashboard",
+ "module": "Workflow Design",
+ "name": "WD Procurement Dashboard",
+ "number_cards": [
+  {
+   "doctype": "Workspace Number Card",
+   "label": "WD Open Material Requests",
+   "number_card_name": "WD Open Material Requests"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "WD Approved RFQs",
+   "number_card_name": "WD Approved RFQs"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "WD Pending Purchase Orders",
+   "number_card_name": "WD Pending Purchase Orders"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "WD Total Purchase Orders",
+   "number_card_name": "WD Total Purchase Orders"
+  }
+ ],
+ "owner": "Administrator",
+ "public": 1,
+ "roles": [
+  { "role": "WD Purchase User" },
+  { "role": "WD Purchase Manager" },
+  { "role": "WD Supply Chain Manager" },
+  { "role": "System Manager" }
+ ],
+ "sequence_id": 1,
+ "shortcuts": [
+  {
+   "doctype": "Workspace Shortcut",
+   "format": "{} Active",
+   "label": "WD Procurement KPI Report",
+   "link_to": "WD Procurement KPI",
+   "type": "Report"
+  },
+  {
+   "doctype": "Workspace Shortcut",
+   "label": "Material Request List",
+   "link_to": "Material Request",
+   "type": "DocType"
+  },
+  {
+   "doctype": "Workspace Shortcut",
+   "label": "Request for Quotation List",
+   "link_to": "Request for Quotation",
+   "type": "DocType"
+  },
+  {
+   "doctype": "Workspace Shortcut",
+   "label": "Purchase Order List",
+   "link_to": "Purchase Order",
+   "type": "DocType"
+  }
+ ],
+ "title": "WD Procurement Dashboard"
+}

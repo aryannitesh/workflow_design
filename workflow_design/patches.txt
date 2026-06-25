@@ -1,0 +1,5 @@
+# Patches are executed in order listed here.
+# Format: workflow_design.patches.<patch_module>.<function_name>
+#
+# Example:
+# workflow_design.patches.v1_0.add_procurement_workflow_fields

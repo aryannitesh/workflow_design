@@ -1,0 +1,19 @@
+{
+ "creation": "2024-01-01 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "Request for Quotation",
+ "dynamic_filters_json": "[[\"Request for Quotation\",\"company\",\"=\",\"frappe.defaults.get_user_default(\\\"Company\\\")\"]]",
+ "filters_json": "[[\"Request for Quotation\",\"docstatus\",\"=\",1,false]]",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "WD Approved RFQs",
+ "module": "Workflow Design",
+ "name": "WD Approved RFQs",
+ "owner": "Administrator",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Monthly",
+ "type": "Document Type"
+}

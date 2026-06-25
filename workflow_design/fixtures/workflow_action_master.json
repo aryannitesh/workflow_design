@@ -1,0 +1,58 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-03-06 00:26:33.482145",
+  "name": "Approve",
+  "workflow_action_name": "Approve"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-03-06 00:26:33.484702",
+  "name": "Reject",
+  "workflow_action_name": "Reject"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-03-06 00:26:33.485987",
+  "name": "Review",
+  "workflow_action_name": "Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-25 13:37:14.146351",
+  "name": "WD Submit for Approval",
+  "workflow_action_name": "WD Submit for Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-25 13:37:14.275659",
+  "name": "WD Approve",
+  "workflow_action_name": "WD Approve"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-25 13:37:14.278768",
+  "name": "WD Reject",
+  "workflow_action_name": "WD Reject"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-25 13:37:14.284301",
+  "name": "WD Request Review",
+  "workflow_action_name": "WD Request Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-25 13:37:14.286870",
+  "name": "WD Resubmit",
+  "workflow_action_name": "WD Resubmit"
+ }
+]

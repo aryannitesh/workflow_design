@@ -1,0 +1,22 @@
+{
+ "add_total_row": 0,
+ "creation": "2024-01-01 00:00:00",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "module": "Workflow Design",
+ "name": "WD Procurement KPI",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Material Request",
+ "report_name": "WD Procurement KPI",
+ "report_type": "Script Report",
+ "roles": [
+  { "role": "WD Purchase User" },
+  { "role": "WD Purchase Manager" },
+  { "role": "WD Supply Chain Manager" },
+  { "role": "System Manager" }
+ ]
+}

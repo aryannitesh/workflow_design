@@ -1,0 +1,266 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ rfq.name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% include "templates/includes/breadcrumbs.html" %}
+{% endblock %}
+
+{% block page_content %}
+<div class="wd-supplier-portal">
+
+  {# ── Header ── #}
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <h3 class="mb-1">{{ rfq.name }}</h3>
+      <span class="text-muted small">
+        {{ _("Date") }}: {{ frappe.utils.formatdate(rfq.transaction_date) }}
+        {% if rfq.schedule_date %}
+          &nbsp;|&nbsp; {{ _("Required By") }}: <strong>{{ frappe.utils.formatdate(rfq.schedule_date) }}</strong>
+        {% endif %}
+      </span>
+    </div>
+    <span class="badge badge-secondary p-2">{{ rfq.status }}</span>
+  </div>
+
+  {% if rfq.message_for_supplier %}
+  <div class="alert alert-info mb-4">
+    <strong>{{ _("Message from Buyer:") }}</strong> {{ rfq.message_for_supplier }}
+  </div>
+  {% endif %}
+
+  {% if existing_sq %}
+  <div class="alert alert-success mb-4">
+    {{ _("You have already submitted a quotation") }}:
+    <a href="/supplier-quotations/{{ existing_sq.name }}"><strong>{{ existing_sq.name }}</strong></a>
+    ({{ existing_sq.status }}).
+    {{ _("You can update it below.") }}
+  </div>
+  {% endif %}
+
+  {# ── Quotation Form ── #}
+  <form id="wd-quotation-form" novalidate>
+    <input type="hidden" id="rfq_name" value="{{ rfq.name }}">
+    <input type="hidden" id="supplier" value="{{ supplier }}">
+
+    {# ── Items table ── #}
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered" id="wd-items-table">
+        <thead class="thead-light">
+          <tr>
+            <th style="width:35%">{{ _("Item") }}</th>
+            <th class="text-right" style="width:10%">{{ _("Qty") }}</th>
+            <th style="width:10%">{{ _("UOM") }}</th>
+            <th class="text-right" style="width:15%">{{ _("Rate") }} ({{ currency }})</th>
+            <th class="text-right" style="width:15%">{{ _("Amount") }} ({{ currency_symbol }})</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in rfq.items %}
+          <tr data-idx="{{ item.idx }}" data-item-code="{{ item.item_code }}"
+              data-rfq-item="{{ item.name }}" data-qty="{{ item.qty }}">
+            <td>
+              <strong>{{ item.item_name or item.item_code }}</strong>
+              {% if item.description %}
+              <p class="text-muted small mb-0">{{ item.description | truncate(120) }}</p>
+              {% endif %}
+            </td>
+            <td class="text-right">{{ item.qty }}</td>
+            <td>{{ item.uom }}</td>
+            <td>
+              <input type="number" min="0" step="0.01"
+                     class="form-control text-right wd-rate-input"
+                     data-idx="{{ item.idx }}"
+                     value="{{ item.prefill_rate if item.prefill_rate else '' }}"
+                     placeholder="0.00" required>
+            </td>
+            <td class="text-right wd-amount" data-idx="{{ item.idx }}">0.00</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="text-right"><strong>{{ _("Grand Total") }}</strong></td>
+            <td class="text-right"><strong>{{ currency_symbol }} <span id="wd-grand-total">0.00</span></strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    {# ── Terms ── #}
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <label class="form-label" for="wd-delivery-days">
+          {{ _("Delivery Days") }} <span class="text-danger">*</span>
+        </label>
+        <input type="number" id="wd-delivery-days" name="delivery_days"
+               class="form-control" min="1" step="1" required
+               value="{{ existing_sq.delivery_date and '' or '' }}"
+               placeholder="{{ _('e.g. 7') }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="wd-payment-days">
+          {{ _("Payment Days") }} <span class="text-danger">*</span>
+        </label>
+        <input type="number" id="wd-payment-days" name="payment_days"
+               class="form-control" min="0" step="1" required
+               placeholder="{{ _('e.g. 30') }}">
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <label class="form-label" for="wd-remarks">{{ _("Remarks") }}</label>
+        <textarea id="wd-remarks" name="remarks" class="form-control" rows="3"
+                  placeholder="{{ _('Any additional notes or conditions...') }}">{{ existing_sq.terms if existing_sq else '' }}</textarea>
+      </div>
+    </div>
+
+    <div id="wd-form-error" class="alert alert-danger d-none"></div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary" id="wd-submit-btn">
+        {{ _("Update Quotation") if existing_sq else _("Submit Quotation") }}
+      </button>
+      <a href="/supplier-rfq" class="btn btn-secondary">{{ _("Back to RFQ List") }}</a>
+    </div>
+  </form>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+(function () {
+  "use strict";
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  const rfqName     = document.getElementById("rfq_name").value;
+  const supplierVal = document.getElementById("supplier").value;
+
+  // ── Amount calculation ─────────────────────────────────────────────────────
+  function recalc() {
+    let grand = 0;
+    document.querySelectorAll("#wd-items-table tbody tr").forEach(function (row) {
+      const qty    = parseFloat(row.dataset.qty) || 0;
+      const rateEl = row.querySelector(".wd-rate-input");
+      const rate   = parseFloat(rateEl ? rateEl.value : 0) || 0;
+      const amt    = qty * rate;
+      grand += amt;
+      const amtEl = row.querySelector(".wd-amount");
+      if (amtEl) amtEl.textContent = amt.toFixed(2);
+    });
+    document.getElementById("wd-grand-total").textContent = grand.toFixed(2);
+  }
+
+  document.querySelectorAll(".wd-rate-input").forEach(function (el) {
+    el.addEventListener("input", recalc);
+  });
+  recalc();   // initialise from prefilled rates
+
+  // ── Form submission ────────────────────────────────────────────────────────
+  document.getElementById("wd-quotation-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const errEl = document.getElementById("wd-form-error");
+    errEl.classList.add("d-none");
+    errEl.textContent = "";
+
+    // Collect items
+    const items = [];
+    let hasRate = false;
+    document.querySelectorAll("#wd-items-table tbody tr").forEach(function (row) {
+      const rate = parseFloat(row.querySelector(".wd-rate-input").value) || 0;
+      if (rate > 0) hasRate = true;
+      items.push({
+        item_code:              row.dataset.itemCode,
+        request_for_quotation_item: row.dataset.rfqItem,
+        qty:                    parseFloat(row.dataset.qty) || 0,
+        rate:                   rate,
+      });
+    });
+
+    if (!hasRate) {
+      errEl.textContent = "{{ _('Please enter a rate for at least one item.') }}";
+      errEl.classList.remove("d-none");
+      return;
+    }
+
+    const deliveryDays = parseInt(document.getElementById("wd-delivery-days").value, 10);
+    const paymentDays  = parseInt(document.getElementById("wd-payment-days").value, 10);
+    if (!deliveryDays || deliveryDays < 1) {
+      errEl.textContent = "{{ _('Delivery Days is required.') }}";
+      errEl.classList.remove("d-none");
+      return;
+    }
+    if (isNaN(paymentDays) || paymentDays < 0) {
+      errEl.textContent = "{{ _('Payment Days is required.') }}";
+      errEl.classList.remove("d-none");
+      return;
+    }
+
+    const btn = document.getElementById("wd-submit-btn");
+    btn.disabled = true;
+    btn.textContent = "{{ _('Submitting...') }}";
+
+    fetch("/api/method/workflow_design.api.supplier_portal.submit_supplier_quotation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-Frappe-CSRF-Token": frappe.csrf_token || getCsrfToken(),
+      },
+      body: new URLSearchParams({
+        rfq_name:      rfqName,
+        supplier:      supplierVal,
+        items:         JSON.stringify(items),
+        delivery_days: deliveryDays,
+        payment_days:  paymentDays,
+        remarks:       document.getElementById("wd-remarks").value || "",
+      }),
+    })
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      btn.disabled = false;
+      btn.textContent = "{{ _('Submit Quotation') }}";
+
+      if (data.exc) {
+        var msg = data.exc;
+        try {
+          var parsed = JSON.parse(data.exc);
+          if (Array.isArray(parsed)) msg = parsed[0];
+        } catch (e) { /* use raw exc */ }
+        errEl.textContent = msg;
+        errEl.classList.remove("d-none");
+        return;
+      }
+      // Frappe sends permission/validation errors in _server_messages
+      if (data._server_messages) {
+        try {
+          var msgs = JSON.parse(data._server_messages);
+          var first = JSON.parse(msgs[0]);
+          errEl.textContent = first.message || first;
+        } catch (e) {
+          errEl.textContent = data._server_messages;
+        }
+        errEl.classList.remove("d-none");
+        return;
+      }
+      if (data.message && data.message.name) {
+        window.location.href = "/supplier-quotations/" + encodeURIComponent(data.message.name);
+      }
+    })
+    .catch(function (err) {
+      btn.disabled = false;
+      btn.textContent = "{{ _('Submit Quotation') }}";
+      errEl.textContent = "{{ _('Network error. Please check your connection and try again.') }}";
+      errEl.classList.remove("d-none");
+      console.error("Submit error:", err);
+    });
+  });
+
+  function getCsrfToken() {
+    var m = document.cookie.match(/csrftoken=([^;]+)/);
+    return m ? m[1] : "";
+  }
+})();
+</script>
+{% endblock %}
